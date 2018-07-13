@@ -7,10 +7,10 @@ ol, ul {
     padding-left: 30px;
 }
 
-.board-row:after {
-    clear: both;
-    content: "";
-    display: table;
+.board-row {
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
 }
 
 .status {
@@ -18,22 +18,44 @@ ol, ul {
 }
 
 .square {
+    position: relative;
     background: #fff;
-    border: 1px solid #999;
+    border: 2px solid #999;
     float: left;
     font-size: 24px;
     font-weight: bold;
     line-height: 34px;
-    height: 34px;
     margin-right: -1px;
     margin-top: -1px;
     padding: 0;
     text-align: center;
-    width: 34px;
+    flex-grow: 1;
+    max-width: 200px;
+
 }
+
+.square:after {
+    content: "";
+    display: block;
+    padding-bottom: 100%;
+}
+
 
 .square:focus {
     outline: none;
+}
+
+.square-content {
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.square-content p {
+    font-size: 60px;
 }
 
 .kbd-navigation .square:focus {
@@ -42,9 +64,55 @@ ol, ul {
 
 .game {
     display: flex;
+    flex-direction: column;
+}
+
+.game-title {
+    margin: auto;
+}
+
+.game-play-area {
+    display: flex;
     flex-direction: row;
 }
 
-.game-info {
-    margin-left: 20px;
+.game-board {
+    flex-grow: 3;
+    display: flex;
+    flex-direction: column;
+}
+
+.game-history {
+    flex-grow: 2;
+}
+
+.blue {
+    color: blue;
+}
+
+.red {
+    color: red;;
+}
+
+.title {
+    font-size: 50px;
+    font-weight: bold;
+}
+
+.status {
+    text-align: center;
+    font-size: 20px;
+}
+
+.history-button {
+    background-color: white;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 2px 1px;
+    cursor: pointer;
 }

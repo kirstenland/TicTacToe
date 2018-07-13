@@ -3,9 +3,12 @@ import ReactDOM from 'react-dom';
 import './index.css';
 
 function Square(props){
+    const colour = props.value === "X" ? "blue" : "red";
     return (<button className="square"
                     onClick = {props.onClick}>
-            {props.value}
+                <div className="square-content">
+                    <p className={colour}>{props.value}</p>
+                </div>
             </button>
     );
 }
@@ -19,7 +22,7 @@ class Board extends React.Component {
 
     render() {
         return (
-        <div>
+        <div className="game-board">
             <div className="board-row">
                 {this.renderSquare(0)}
                 {this.renderSquare(1)}
@@ -81,29 +84,36 @@ class Game extends React.Component {
                          'Go to game start';
             return (
                 <li key={move}>
-                    <button onClick={() => this.jumpTo(move)}>{desc}</button>
+                    <button className="history-button" onClick={() => this.jumpTo(move)}>{desc}</button>
                 </li>
             );
         });
 
         let status;
+        let colour;
         if (winner) {
             status = "Winner: " + winner;
+            colour = winner === "X" ? "blue" : "red";
         } else {
             status = "Next player: " + (this.state.xIsNext ? "X" : "O");
+            colour = this.state.xIsNext ? "blue" : "red";
         }
 
         return (
             <div className="game">
-                <div className="game-board">
+                <div className="game-title">
+                    <div className="title">TIC TAC TOE</div>
+                    <div className={"status " + colour}>{status}</div>
+                </div>
+                <div className="game-play-area">
                     <Board
                         squares={current.squares}
                         onClick={(i) => this.handleClick(i)}
                     />
-                </div>
-                <div className="game-info">
-                    <div>{status}</div>
-                    <ol>{moves}</ol>
+                    <div className="game-history">
+                        <h2>HISTORY: click to time travel</h2>
+                        <ol>{moves}</ol>
+                    </div>
                 </div>
             </div>
     );

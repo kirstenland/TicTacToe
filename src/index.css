@@ -94,6 +94,10 @@ ol, ul {
     color: red;;
 }
 
+.black {
+    color: black;
+}
+
 .title {
     font-size: 50px;
     font-weight: bold;

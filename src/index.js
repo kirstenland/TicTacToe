@@ -2,46 +2,10 @@ import React from 'react';
 import ReactDOM from 'react-dom';
 import './index.css';
 
-function Square(props){
-    const colour = props.value === "X" ? "blue" : "red";
-    return (<button className="square"
-                    onClick = {props.onClick}>
-                <div className="square-content">
-                    <p className={colour}>{props.value}</p>
-                </div>
-            </button>
-    );
-}
 
-class Board extends React.Component {
-
-    renderSquare(i) {
-        return <Square value={this.props.squares[i]}
-                       onClick={() => this.props.onClick(i)}/>;
-    }
-
-    render() {
-        return (
-        <div className="game-board">
-            <div className="board-row">
-                {this.renderSquare(0)}
-                {this.renderSquare(1)}
-                {this.renderSquare(2)}
-            </div>
-            <div className="board-row">
-                {this.renderSquare(3)}
-                {this.renderSquare(4)}
-                {this.renderSquare(5)}
-            </div>
-            <div className="board-row">
-                {this.renderSquare(6)}
-                {this.renderSquare(7)}
-                {this.renderSquare(8)}
-            </div>
-        </div>
-    );
-    }
-}
+import calculateWinner from './calculate-winner.js';
+import GamePlayArea from './components/game-play-area';
+import GameTitle from './components/game-title.js'
 
 class Game extends React.Component {
     constructor(props) {
@@ -78,74 +42,15 @@ class Game extends React.Component {
         const current = history[this.state.stepNumber];
         const winner = calculateWinner(current.squares);
 
-        const moves = history.map((step, move) => {
-            const desc = move ?
-                         'Go to move #' + move :
-                         'Go to game start';
-            return (
-                <li key={move}>
-                    <button className="history-button" onClick={() => this.jumpTo(move)}>{desc}</button>
-                </li>
-            );
-        });
-
-        let status;
-        let colour;
-        if (winner === "D") {
-            status = "It is a draw!!!";
-            colour = "black";
-        }
-        else if (winner) {
-            status = "Winner: " + winner + "!!!";
-            colour = winner === "X" ? "blue" : "red";
-        } else {
-            status = "Next player: " + (this.state.xIsNext ? "X" : "O");
-            colour = this.state.xIsNext ? "blue" : "red";
-        }
-
         return (
             <div className="game">
-                <div className="game-title">
-                    <div className="title">TIC TAC TOE</div>
-                    <div className={"status " + colour}>{status}</div>
-                </div>
-                <div className="game-play-area">
-                    <Board
-                        squares={current.squares}
-                        onClick={(i) => this.handleClick(i)}
-                    />
-                    <div className="game-history">
-                        <h2>HISTORY: click to time travel</h2>
-                        <ol>{moves}</ol>
-                    </div>
-                </div>
-            </div>
-    );
-    }
-}
-
-function calculateWinner(squares) {
-    const lines = [
-        [0, 1, 2],
-        [3, 4, 5],
-        [6, 7, 8],
-        [0, 3, 6],
-        [1, 4, 7],
-        [2, 5, 8],
-        [0, 4, 8],
-        [2, 4, 6],
-    ];
-    for (let i = 0; i < lines.length; i++) {
-        const [a, b, c] = lines[i];
-        if (squares[a] && squares[a] === squares[b] && squares[a] === squares[c]) {
-            return squares[a];
-        }
-    }
-
-    if (squares.every(x => x)) {
-        return "D";
-    } else {
-        return null;
+                <GameTitle winner={winner} xIsNext={this.state.xIsNext}/>
+                <GamePlayArea history={history}
+                              handleClick={(i) => this.handleClick(i)}
+                              squares={current.squares}
+                              jumpTo={(i) => this.jumpTo(i)}
+                />
+            </div>);
     }
 }
 
